@@ -2,6 +2,8 @@
 
 A halachic calendar application for tracking menstrual periods and calculating important dates according to Jewish law (niddah/family purity laws).
 
+> **Disclaimer:** This project is in beta. Predictions may contain errors. This tool is intended as a convenience aid and **does not substitute consulting a competent posek (halachic authority)**. Always verify results with your rabbi.
+
 ## Features
 
 ### Interactive Calendar UI
@@ -100,7 +102,16 @@ The calculator fully supports the Hebrew calendar, including:
 - **[bubbletea](https://github.com/charmbracelet/bubbletea)**: Terminal UI framework
 - **[lipgloss](https://github.com/charmbracelet/lipgloss)**: Terminal styling
 
+## Contributing
+
+Contributions are welcome! Here are some ways you can help:
+
+- **Bug reports** — If you find a calculation error or unexpected behavior, please [open an issue](https://github.com/david-gang/nidda_calculator/issues). Halachic calculation bugs are especially important to catch.
+- **Halachic review** — If you have halachic knowledge, we'd appreciate review of the prediction logic in `pkg/nidda/` for correctness.
+- **Feature requests** — Ideas for new features (additional kavua patterns, support for different minhagim, etc.) are welcome as issues.
+- **Code contributions** — Fork the repo, make your changes, and open a pull request. Please run `go test ./pkg/nidda/...` before submitting.
+
 ## License
 
-This is a personal/educational project for Jewish halachic observance.
+This project is licensed under the [MIT License](LICENSE).
 
