@@ -250,7 +250,8 @@ func TestRealWorldCase(t *testing.T) {
 		if p.Type == "Onah Beinonit (31)" {
 			hasOB31 = true
 		}
-	}	if !hasHaflaga {
+	}
+	if !hasHaflaga {
 		t.Error("Expected Haflaga prediction to be present")
 	}
 	if !hasOB30 {
