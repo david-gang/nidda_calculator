@@ -214,6 +214,46 @@ func TestVessetHaChodeshVsOnahBeinonit(t *testing.T) {
 	}
 }
 
+// TestAdarRoundTrip verifies that "Adar" in non-leap years loads correctly.
+// hdate marshals Adar1 (in non-leap year) as "Adar", but MonthFromName("Adar")
+// incorrectly returns Adar2. Our custom LoadFromFile fixes this.
+func TestAdarRoundTrip(t *testing.T) {
+	// 6 Adar 5786 - non-leap year, so "Adar" means Adar1
+	manager := &NiddaManager{}
+	manager.AddPeriod(hdate.New(5786, hdate.Tevet, 14), Day)
+	manager.AddPeriod(hdate.New(5786, hdate.Shvat, 12), Day)
+	manager.AddPeriod(hdate.New(5786, hdate.Adar1, 6), Day)
+
+	tempFile := t.TempDir() + "/nidda_history.json"
+	if err := manager.SaveToFile(tempFile); err != nil {
+		t.Fatalf("SaveToFile failed: %v", err)
+	}
+
+	// Load back - the JSON will have "Adar" for the last entry
+	loaded := &NiddaManager{}
+	if err := loaded.LoadFromFile(tempFile); err != nil {
+		t.Fatalf("LoadFromFile failed: %v", err)
+	}
+
+	last := loaded.History[len(loaded.History)-1]
+	expectedDate := hdate.New(5786, hdate.Adar1, 6)
+	expectedRD := expectedDate.Abs()
+	if last.Date.Abs() != expectedRD {
+		t.Errorf("Adar round-trip failed: expected 6 Adar 5786 (RD=%d), got %s (RD=%d)",
+			expectedRD, last.Date.String(), last.Date.Abs())
+	}
+
+	// Predictions should be in Nisan, not Iyyar
+	ob30, err := loaded.GetOnahBeinonit30()
+	if err != nil {
+		t.Fatalf("GetOnahBeinonit30 failed: %v", err)
+	}
+	expectedOB30 := hdate.New(5786, hdate.Nisan, 6)
+	if ob30.Date.Abs() != expectedOB30.Abs() {
+		t.Errorf("Onah Beinonit (30) should be 6 Nisan, got %s", ob30.Date.String())
+	}
+}
+
 // TestRealWorldCase tests the exact scenario from the bug report.
 func TestRealWorldCase(t *testing.T) {
 	manager := &NiddaManager{}	// From the user's nidda_history.json
