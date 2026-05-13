@@ -8,8 +8,6 @@ import (
 	"time"
 
 	"nidda_calculator/pkg/nidda"
-
-	"github.com/hebcal/hdate"
 )
 
 const storageFile = "nidda_history.json"
@@ -80,8 +78,7 @@ func handleAdd(m *nidda.NiddaManager) {
 	}
 
 	// Basic validation: No future dates
-	nowHD := hdate.FromTime(time.Now())
-	if hDate.Abs() > nowHD.Abs() {
+	if nidda.IsPeriodInFuture(hDate, onah, time.Now()) {
 		fmt.Println("Error: Cannot add a period in the future.")
 		return
 	}

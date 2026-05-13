@@ -65,3 +65,21 @@ func ParseOnah(s string) (Onah, error) {
 		return 0, fmt.Errorf("invalid onah: expected 'day' or 'night'")
 	}
 }
+
+// LatestAllowedHebrewDate returns the latest Hebrew date that may be logged for
+// the given onah. It uses the same civil-day mapping as ParseDate and
+// hdate.FromTime: night onahs may include the next Hebrew day.
+func LatestAllowedHebrewDate(onah Onah, now time.Time) hdate.HDate {
+	hd := hdate.FromTime(now)
+	if onah == Night {
+		return hdate.FromRD(hd.Abs() + 1)
+	}
+	return hd
+}
+
+// IsPeriodInFuture reports whether a parsed period is after the latest
+// allowed Hebrew date for its onah.
+func IsPeriodInFuture(hDate hdate.HDate, onah Onah, now time.Time) bool {
+	allowed := LatestAllowedHebrewDate(onah, now)
+	return hDate.Abs() > allowed.Abs()
+}
