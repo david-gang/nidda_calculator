@@ -76,7 +76,7 @@ For each prediction, it also calculates the **Ohr Zarua** (the immediately prece
 ## Installation
 
 ### Prerequisites
-- Go 1.24.3 or later
+- Go 1.25 or later
 
 ### Build
 ```bash
